@@ -26,7 +26,7 @@ pages:
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp docs/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
-    - conda install nodejs make
+    - conda install nodejs make matplotlib
     - make doc-req
     - make doc
     # Build documentation pdf
