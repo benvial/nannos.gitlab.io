@@ -51,7 +51,7 @@ pages:
     - git branch doc
     - git checkout doc
     - rm -rf .gitlab-ci.yml README.md Makefile
-    - cp -r nannos/doc/_build/html/notebooks/auto_examples/ notebooks/
+    - cp -r nannos/doc/_build/html/notebooks/ notebooks/
     - cp -r nannos/environment.yml .
     - cp -r nannos/doc/binder/* .
     - mkdir -p .jupyter/custom
