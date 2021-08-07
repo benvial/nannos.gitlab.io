@@ -9,7 +9,9 @@ cache:
     - /builds/nannos/nannos.gitlab.io/.cache/texlive
 
 before_script:
-  - apt-get update -q && apt-get install -q -y --no-install-recommends  libfontconfig
+  ## install os tools
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip libfontconfig
+  ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
   - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
@@ -20,9 +22,13 @@ before_script:
   - gitlab_hostname=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@||g' | sed -e 's|/.*||g')
   - ssh-keyscan "${gitlab_hostname}" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
+  ## clone main nannos repository
   - git clone --depth 1 https://gitlab.com/nannos/nannos.git
+  ## install python package
   - cd nannos
   - pip install -e .
+  ## install fonts
+  - bash doc/binder/postBuild
 
 pages:
   stage: doc
