@@ -10,7 +10,7 @@ cache:
 
 before_script:
   ## install os tools
-  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip libfontconfig
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
