@@ -6,7 +6,7 @@ stages:
 
 cache:
   paths:
-    - .cache/texlive
+    - /builds/nannos/nannos.gitlab.io/.cache/texlive
 
 before_script:
   - apt-get update -q && apt-get install -q -y --no-install-recommends  libfontconfig
@@ -35,7 +35,7 @@ pages:
     - make doc
     # Build documentation pdf
     - cd doc/texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
-    - export PATH=.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - export PATH=/builds/nannos/nannos.gitlab.io/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
     - cd ../..
     - make latex && make pdf && cd ..
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
