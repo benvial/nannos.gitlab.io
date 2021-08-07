@@ -4,8 +4,12 @@ image: continuumio/miniconda3:latest
 stages:
   - doc
 
+cache:
+  paths:
+    - .cache/texlive
 
 before_script:
+  - apt-get update -q && apt-get install -q -y --no-install-recommends  libfontconfig
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
   - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
@@ -31,7 +35,8 @@ pages:
     - make doc
     # Build documentation pdf
     - cd doc/texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
-    - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex && cd ../..
+    - export PATH=.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - cd ../..
     - make latex && make pdf && cd ..
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
     - cp -r doc/_build/html/ ../public/
