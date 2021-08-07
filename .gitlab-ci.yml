@@ -1,0 +1,60 @@
+
+image: continuumio/miniconda3:latest
+
+stages:
+  - doc
+
+
+before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - git config --global user.name "${GITLAB_USER_NAME}"
+  - git config --global user.email "${GITLAB_USER_EMAIL}"
+  - gitlab_hostname=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@||g' | sed -e 's|/.*||g')
+  - ssh-keyscan "${gitlab_hostname}" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - git clone --depth 1 https://gitlab.com/nannos/nannos.git
+  - cd nannos
+  - pip install -e .
+
+pages:
+  stage: doc
+  script:
+    # Build documentation html
+    - mkdir -p ${HOME}/.config/matplotlib
+    - cp docs/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
+    - conda install nodejs make
+    - make doc-req
+    - make doc
+    # Build documentation pdf
+    - cd docs/texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
+    - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex && cd ../..
+    - make latex && make pdf && cd ..
+    - mv docs/_build/latex/nannos.pdf docs/_build/html/_downloads/
+    - cp -r docs/_build/html/ ../public/
+    - cd ..
+    # In the doc branch, make a clean repository for binder 
+    - git branch doc
+    - git checkout doc
+    - rm -rf .gitlab-ci.yml README.md Makefile
+    - cp -r nannos/docs/_build/html/notebooks/auto_examples/ notebooks/
+    - cp -r nannos/environment.yml .
+    - cp -r nannos/docs/binder/* .
+    - mkdir -p .jupyter/custom
+    - cp nannos/docs/_custom/static/css/custom_notebook.css .jupyter/custom/custom.css
+    - mkdir -p .config/matplotlib
+    - cp nannos/docs/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc .config/matplotlib/
+    - rm -rf nannos
+    - git add .
+    - git commit -m "Built documentation from $CI_COMMIT_SHORT_SHA [skip ci]" || echo "No changes, nothing to commit!"
+    - url_host=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@|ssh://git@|g')
+    - git remote set-url --push origin "${url_host}"
+    - git push origin HEAD:doc --force
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
