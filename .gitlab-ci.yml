@@ -9,8 +9,8 @@ cache:
     - /builds/nannos/nannos.gitlab.io/.cache/texlive
 
 before_script:
-  # ## install os tools
-  # - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig
+  ## install os tools
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
@@ -22,45 +22,44 @@ before_script:
   - gitlab_hostname=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@||g' | sed -e 's|/.*||g')
   - ssh-keyscan "${gitlab_hostname}" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
-  # - cat ~/.ssh/id_rsa
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  # ## clone main nannos repository
-  # - git clone --depth 1 https://gitlab.com/nannos/nannos.git
-  # ## install python package
-  # - cd nannos
-  # - pip install -e .
-  # ## install fonts
-  # - bash doc/binder/postBuild
+  - cat ~/.ssh/id_rsa
+  ## clone main nannos repository
+  - git clone --depth 1 https://gitlab.com/nannos/nannos.git
+  ## install python package
+  - cd nannos
+  - pip install -e .
+  ## install fonts
+  - bash doc/binder/postBuild
 
 pages:
   stage: doc
   script:
     # Build documentation html
-    # - mkdir -p ${HOME}/.config/matplotlib
-    # - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
-    # - conda install nodejs make matplotlib
-    # - make doc-req
-    # - make doc
-    # # Build documentation pdf
-    # - cd doc/texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
-    # - export PATH=/builds/nannos/nannos.gitlab.io/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
-    # - cd ../..
-    # - make latex && make pdf && cd ..
-    # - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
-    # - cp -r doc/_build/html/ ../public/
-    # - cd ..
+    - mkdir -p ${HOME}/.config/matplotlib
+    - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
+    - conda install nodejs make matplotlib
+    - make doc-req
+    - make doc
+    # Build documentation pdf
+    - cd doc/texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
+    - export PATH=/builds/nannos/nannos.gitlab.io/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - cd ../..
+    - make latex && make pdf && cd ..
+    - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
+    - cp -r doc/_build/html/ ../public/
+    - cd ..
     # In the doc branch, make a clean repository for binder 
     - git branch doc
     - git checkout doc
     - rm -rf .gitlab-ci.yml README.md Makefile
-    # - cp -r nannos/doc/_build/html/notebooks/ notebooks/
-    # - cp -r nannos/environment.yml .
-    # - cp -r nannos/doc/binder/* .
-    # - mkdir -p .jupyter/custom
-    # - cp nannos/doc/_custom/static/css/custom_notebook.css .jupyter/custom/custom.css
-    # - mkdir -p .config/matplotlib
-    # - cp nannos/doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc .config/matplotlib/
-    # - rm -rf nannos
+    - cp -r nannos/doc/_build/html/notebooks/ notebooks/
+    - cp -r nannos/environment.yml .
+    - cp -r nannos/doc/binder/* .
+    - mkdir -p .jupyter/custom
+    - cp nannos/doc/_custom/static/css/custom_notebook.css .jupyter/custom/custom.css
+    - mkdir -p .config/matplotlib
+    - cp nannos/doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc .config/matplotlib/
+    - rm -rf nannos
     - git add .
     - git commit -m "Built documentation from $CI_COMMIT_SHORT_SHA [skip ci]" || echo "No changes, nothing to commit!"
     - url_host=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@|ssh://git@|g')
