@@ -22,7 +22,6 @@ before_script:
   - gitlab_hostname=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@||g' | sed -e 's|/.*||g')
   - ssh-keyscan "${gitlab_hostname}" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
-  - cat ~/.ssh/id_rsa
   ## clone main nannos repository
   - git clone --depth 1 https://gitlab.com/nannos/nannos.git
   ## install python package
