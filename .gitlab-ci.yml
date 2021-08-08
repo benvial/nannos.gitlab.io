@@ -22,6 +22,8 @@ before_script:
   - gitlab_hostname=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@||g' | sed -e 's|/.*||g')
   - ssh-keyscan "${gitlab_hostname}" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
+  # - cat ~/.ssh/id_rsa
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   ## clone main nannos repository
   - git clone --depth 1 https://gitlab.com/nannos/nannos.git
   ## install python package
@@ -62,8 +64,7 @@ pages:
     - git add .
     - git commit -m "Built documentation from $CI_COMMIT_SHORT_SHA [skip ci]" || echo "No changes, nothing to commit!"
     - url_host=$(echo "${CI_REPOSITORY_URL}" | sed -e 's|https\?://gitlab-ci-token:.*@|ssh://git@|g')
-    - echo ${url_host}
-    - git remote set-url --push origin git@gitlab.com:nannos/nannos.gitlab.io.git
+    - git remote set-url --push origin "${url_host}"
     - git push origin HEAD:doc --force
   artifacts:
     paths:
