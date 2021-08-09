@@ -63,7 +63,7 @@ pages:
     # In the doc branch, make a clean repository for binder 
     - git branch doc
     - git checkout doc
-    - rm -rf .gitlab-ci.yml README.md Makefile
+    - rm -rf .gitlab-ci.yml README.rst Makefile
     - cp -r nannos/doc/_build/html/notebooks/ notebooks/
     - cp -r nannos/environment.yml .
     - cp -r nannos/doc/binder/* .
