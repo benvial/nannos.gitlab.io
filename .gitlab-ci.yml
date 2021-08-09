@@ -4,6 +4,12 @@ image: continuumio/miniconda3:latest
 stages:
   - doc
 
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  TERM: xterm
+
+
 cache:
   paths:
     - .cache/texlive
@@ -49,12 +55,13 @@ pages:
     - cd doc
     # Build documentation pdf
     - |
-      if [[ -d /builds/nannos/nannos.gitlab.io/.cache/texlive ]]; then
+      if [[ -d $CI_PROJECT_DIR/.cache/texlive ]]; then
         echo "texlive cache found"
       else
         cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
       fi
-    - export PATH=/builds/nannos/nannos.gitlab.io/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
+    - export PATH=$CI_PROJECT_DIR/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
     - cd ../..
     - make latex && make pdf && cd ..
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
