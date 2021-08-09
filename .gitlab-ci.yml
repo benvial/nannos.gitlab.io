@@ -12,9 +12,9 @@ variables:
 
 cache:
   paths:
-    - .cache/texlive
     - .cache/pip
     - .cache/conda
+    - .cache/texlive
 
 before_script:
   ## install os tools
@@ -38,16 +38,17 @@ before_script:
   - conda config --add channels conda-forge
   - conda create --prefix .cache/conda/nannos python=3.8
   - source activate .cache/conda/nannos
-  - conda install nodejs make matplotlib
   - python -V  # Print out python version for debugging
-  - pip install -e .
-  - make doc-req
   ## install fonts
   - bash doc/binder/postBuild
 
 pages:
   stage: doc
   script:
+    # Install python package
+    - conda install nodejs make matplotlib-base
+    - pip install -e .
+    - make doc-req
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
@@ -60,7 +61,6 @@ pages:
       else
         cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
       fi
-    - cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
     - export PATH=$CI_PROJECT_DIR/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
     - cd ../..
     - make latex && make pdf && cd ..
