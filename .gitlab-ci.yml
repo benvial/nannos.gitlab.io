@@ -45,8 +45,10 @@ before_script:
 pages:
   stage: doc
   script:
+    # Install requirements with mamba
+    - conda install mamba
+    - mamba install numpy scipy matplotlib-base shapely joblib colorlog psutil ipython jax nlopt nodejs make
     # Install python package
-    - conda install nodejs make matplotlib-base
     - pip install -e .
     - make doc-req
     # Build documentation html
