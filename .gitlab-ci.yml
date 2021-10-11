@@ -47,7 +47,7 @@ pages:
   script:
     # Install requirements with mamba
     - conda install mamba
-    - mamba install numpy scipy matplotlib-base shapely joblib colorlog psutil ipython jax nlopt nodejs make
+    - mamba install numpy scipy matplotlib-base shapely joblib colorlog psutil ipython jax jaxlib nlopt nodejs make
     # Install python package
     - pip install -e .
     - make doc-req
