@@ -14,7 +14,6 @@ cache:
   paths:
     - .cache/pip
     - .cache/conda
-    - .cache/texlive
 
 before_script:
   ## install os tools
@@ -58,7 +57,7 @@ pages:
     - cd doc
     # Build documentation pdf
     - cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
-    - export PATH=$CI_PROJECT_DIR/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - export PATH=/tmp/.cache/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
     - cd ../..
     - make latex && make pdf && cd ..
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
