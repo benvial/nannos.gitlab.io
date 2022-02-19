@@ -11,7 +11,7 @@ variables:
 
 before_script:
   ## install os tools
-  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make nodejs
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
@@ -31,6 +31,7 @@ before_script:
   - conda config --add channels conda-forge
   - conda env create -f environment.yml
   - source activate nannos
+  - conda install nodejs
   - python -V  # Print out python version for debugging
   ## install fonts
   - bash doc/binder/postBuild
