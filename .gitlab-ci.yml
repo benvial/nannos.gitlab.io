@@ -6,18 +6,12 @@ stages:
 
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   TERM: xterm
 
 
-cache:
-  paths:
-    - .cache/pip
-    - .cache/conda
-
 before_script:
   ## install os tools
-  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make nodejs
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
@@ -35,8 +29,8 @@ before_script:
   - cd nannos
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
-  - conda create --prefix .cache/conda/nannos python=3.8
-  - source activate .cache/conda/nannos
+  - conda env create -f environment.yml
+  - source activate nannos
   - python -V  # Print out python version for debugging
   ## install fonts
   - bash doc/binder/postBuild
@@ -44,11 +38,8 @@ before_script:
 pages:
   stage: doc
   script:
-    # Install requirements with mamba
-    - conda install mamba
-    - mamba install numpy scipy matplotlib-base shapely joblib colorlog psutil ipython jax jaxlib nlopt nodejs make
     # Install python package
-    - pip install -e .
+    - make install
     - make doc-req
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
