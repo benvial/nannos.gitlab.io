@@ -11,7 +11,7 @@ variables:
 
 before_script:
   ## install os tools
-  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make
+  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make libgl1-mesa-dev xvfb
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
@@ -55,7 +55,7 @@ pages:
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
     - cp -r doc/_build/html/ ../public/
     - cd ..
-    # In the doc branch, make a clean repository for binder 
+    # In the doc branch, make a clean repository for binder
     - git branch doc
     - git checkout doc
     - rm -rf .gitlab-ci.yml README.rst Makefile
