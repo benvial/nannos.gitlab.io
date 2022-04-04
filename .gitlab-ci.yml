@@ -45,11 +45,11 @@ pages:
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
-    - make doc
+    - make doc-noplot
     - cd doc
     # Build documentation pdf
     - cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
-    - export PATH=$HOME/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
+    - export PATH=/root/texlive/bin/x86_64-linux:$PATH && make latex && cd _build/latex && texliveonfly -c xelatex nannos.tex
     - cd ../..
     - make latex && make pdf && cd ..
     - mv doc/_build/latex/nannos.pdf doc/_build/html/_downloads/
