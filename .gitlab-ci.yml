@@ -45,7 +45,7 @@ pages:
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
-    - make doc-noplot
+    - make doc
     - cd doc
     # Build documentation pdf
     - cd texlive && chmod +x texlive_install.sh && ./texlive_install.sh && cd ..
