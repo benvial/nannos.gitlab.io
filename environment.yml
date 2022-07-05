@@ -1,0 +1,26 @@
+name: nannos
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python>=3.8
+  - pip
+  - numpy
+  - scipy
+  - matplotlib-base
+  - shapely
+  - joblib
+  - colorlog
+  - psutil
+  - ipython
+  - nlopt
+  - pytorch
+  - magma
+  - cudatoolkit=10.2
+  - pyvista
+  - pythreejs
+  - ipyvtklink
+  - panel
+  - autograd
+  - pip:
+    - git+https://gitlab.com/nannos/nannos.git
