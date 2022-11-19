@@ -1,5 +1,5 @@
 
-image: continuumio/miniconda3:latest
+image: benvial/nannos:latest
 
 stages:
   - doc
@@ -28,16 +28,8 @@ before_script:
   - git clone --depth 1 https://gitlab.com/nannos/nannos.git
   ## install python package
   - cd nannos
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
-  - conda env create -f environment.yml
-  - source activate nannos
-  - conda install nodejs
+  - mamba install nodejs
   - python -V  # Print out python version for debugging
-  # pyvista config for x server
-  # see https://github.com/pyvista/gl-ci-helpers/blob/master/travis/setup_headless_display.sh
-  # - export DISPLAY=:99.0
-  # - export PYVISTA_OFF_SCREEN=True
   - which Xvfb
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - sleep 3
