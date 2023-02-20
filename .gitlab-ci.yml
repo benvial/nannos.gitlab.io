@@ -43,7 +43,7 @@ pages:
     - make install
     - make doc-req
     # Kaggle benchmark
-    - cd examples/benchmarks/kaggle && make -s all && cd ../../..
+    - cd examples/benchmarks/kaggle && make -s pull && make -s dld && cd ../../..
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
