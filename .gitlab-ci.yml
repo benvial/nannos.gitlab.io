@@ -34,7 +34,7 @@ before_script:
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - sleep 3
   ## install fonts
-  - cd doc/binder/ && bash install_fonts ../_assets
+  - bash doc/binder/install_fonts doc/_assets
 
 pages:
   stage: doc
