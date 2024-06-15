@@ -1,0 +1,32 @@
+name: nannos
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python>=3.9
+  - pip
+  - numpy
+  - scipy
+  - matplotlib   #-base
+  - shapely
+  - joblib
+  - colorlog
+  - psutil
+  - ipython
+  - pytorch
+  - pytorch-gpu
+  - jax
+  - jaxlib 
+  # uncomment the following line if you want to use gpu with jax
+  #- jaxlib  =*=*cuda*
+  - autograd >= 1.6.2
+  - libmagma_sparse
+  - magma
+  - pyvista[jupyter] >= 0.43.1
+  - ipywidgets
+  - trame
+  - trame-vuetify
+  - trame-vtk
+  - pip:
+    - nlopt
+    - git+https://gitlab.com/nannos/nannos.git
