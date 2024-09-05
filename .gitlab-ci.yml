@@ -44,6 +44,8 @@ pages:
     - make doc-req
     # Kaggle benchmark
     - cd examples/benchmarks/kaggle && make -s pull && make -s dld && ls -a nannos_cpu && ls -a nannos_gpu && cd ../../..
+    # Modal benchmark
+    - pip install modal && cd examples/benchmarks/modal && python get_results.py && cd ../../..
     # Build documentation html
     - mkdir -p ${HOME}/.config/matplotlib
     - cp doc/_custom/nannos.mplstyle matplotlibrc && mv matplotlibrc ${HOME}/.config/matplotlib/
