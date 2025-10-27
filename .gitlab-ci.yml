@@ -42,8 +42,6 @@ pages:
     # Install python package
     - make install
     - make doc-req
-    # Kaggle benchmark
-    - cd examples/benchmarks/kaggle && make -s pull && make -s dld && ls -a nannos_cpu && ls -a nannos_gpu && cd ../../..
     # Modal benchmark
     - pip install modal && cd examples/benchmarks/modal && python get_results.py && cd ../../..
     # Build documentation html
@@ -82,3 +80,4 @@ pages:
       - public
   only:
     - master
+
