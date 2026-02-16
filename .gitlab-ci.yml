@@ -11,8 +11,6 @@ variables:
 
 
 before_script:
-  ## install os tools
-  - apt-get update -q && apt-get install -q -y --no-install-recommends wget unzip fontconfig libfontconfig make libgl1-mesa-dev xvfb
   ## setup ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
